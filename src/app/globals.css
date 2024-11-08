@@ -1,3 +1,14 @@
+:root {
+  --main-background-color: #f7f7f7;
+  --primary-text-color: #333333;
+  --secodary-text-color: #616161;
+  --highlight-color: #4caf50;
+  --alert-color: #f44336;
+  --slider-header-background: #c8e6c9;
+  --main-header-background: #4caf50;
+  --interactive-elements-color: #1e88e5;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -8,4 +19,15 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  background-color: var(--main-background-color);
+}
+
+li {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
 }

@@ -1,0 +1,20 @@
+.financialContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.financialInformation {
+  display: flex;
+  justify-content: space-around;
+  height: 100%;
+}
+
+.financialItem {
+  display: flex;
+  flex-direction: column;
+  font-size: 18px;
+  align-items: center;
+  text-align: center;
+  justify-content: center;
+  height: 100%;
+}
