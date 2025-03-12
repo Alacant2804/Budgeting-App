@@ -6,18 +6,19 @@
   cursor: pointer;
   margin-left: 1.5rem;
   color: #000;
+  z-index: 20;
 }
 
 /* Slider Style */
-nav.user-container {
+nav.userContainer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 20%;
-  height: 100%;
+  width: 30%;
+  height: 100vh;
   background-color: var(--slider-header-background);
-  transform: translate(-200%);
-  transition: transform 0.3s ease-in-out;
+  transform: translate(-100%);
+  transition: transform 3s ease-in-out;
   z-index: 15;
   display: flex;
   flex-direction: column;
@@ -28,19 +29,11 @@ nav.open {
   transform: translate(0%);
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10;
-}
-
 .menu {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   height: 100%;
   margin-left: 1.5rem;
   margin-top: 6rem;
@@ -66,7 +59,7 @@ nav.open {
   transition: width 0.3s ease;
 }
 
-.menu-item a:hover::after {
+.menu-item:hover a::after {
   width: 100%;
 }
 

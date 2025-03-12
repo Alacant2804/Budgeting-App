@@ -5,9 +5,11 @@ import styles from "./MainHeader.module.css";
 
 export default function MainHeader() {
   return (
-    <header className={styles.header}>
-      <SliderHeader />
-      <StatsHeader />
-    </header>
+    <>
+      <header className={styles.header}>
+        <SliderHeader />
+        <StatsHeader />
+      </header>
+    </>
   );
 }
