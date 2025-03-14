@@ -14,7 +14,7 @@ nav.userContainer {
   position: fixed;
   top: 0;
   left: 0;
-  width: 30%;
+  min-width: 20%;
   height: 100vh;
   background-color: var(--slider-header-background);
   transform: translate(-100%);
@@ -29,7 +29,17 @@ nav.open {
   transform: translate(0%);
 }
 
-.menu {
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+ul.menu {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -39,16 +49,7 @@ nav.open {
   margin-top: 6rem;
 }
 
-.menu-item.login {
-  margin-top: auto;
-}
-
-.menu-item a {
-  position: relative;
-  color: var(--primary-text-color);
-}
-
-.menu-item a::after {
+li.menu-item ::after {
   content: "";
   position: absolute;
   left: 0;
@@ -59,11 +60,16 @@ nav.open {
   transition: width 0.3s ease;
 }
 
-.menu-item:hover a::after {
+li.menu-item:hover ::after {
   width: 100%;
 }
 
-li.menu-item {
-  font-size: 1.5rem;
+.menuItem {
+  font-size: 5rem;
   margin-bottom: 2rem;
+  color: var(--primary-text-color);
+}
+
+li.menu-item.login {
+  margin-top: auto;
 }

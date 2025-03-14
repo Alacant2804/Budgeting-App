@@ -9,20 +9,20 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "mongodb": "^6.10.0",
-    "mongoose": "^8.8.0",
+    "@prisma/client": "^6.5.0",
     "next": "15.0.2",
+    "pg": "^8.14.0",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028"
   },
   "devDependencies": {
-    "@types/mongoose": "^5.11.97",
     "@types/node": "^20",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
     "eslint": "^8",
     "eslint-config-next": "15.0.2",
     "prettier": "^3.3.3",
+    "prisma": "^6.5.0",
     "typescript": "^5"
   }
 }
