@@ -75,10 +75,10 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
   const [netWorth, setNetWorth] = useState(0);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-  // Update net worth whenever accounts change
+  // Update net worth whenever account changes
   useEffect(() => {
     const totalBalance = accounts.reduce(
-      (total, acc) => total + acc.balance,
+      (total, account) => total + account.balance,
       0
     );
     setNetWorth(totalBalance);

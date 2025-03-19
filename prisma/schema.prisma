@@ -13,6 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Models
 model Transaction {
   id          Int      @id @default(autoincrement())
   fromType    String
@@ -29,7 +30,6 @@ model Income {
   amount     Float
   name     String
   date       DateTime
-  description String?
 }
 
 model Account {
@@ -44,6 +44,7 @@ model Expense {
   name            String
   amount          Float
   icon            String?
+  date            DateTime
   plannedExpense  PlannedExpense? @relation(fields: [plannedExpenseId], references: [id])
   plannedExpenseId Int?          @unique
 }

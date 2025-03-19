@@ -1,16 +1,26 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextRequest, NextResponse } from "next/server";
 
 export default function apiErrorHandler(
-  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>
+  handler: (
+    req: NextRequest,
+    params?: { params?: any }
+  ) => Promise<NextResponse>
 ) {
-  return async (req: NextApiRequest, res: NextApiResponse) => { // Return a function that accepts req and res
+  return async (req: NextRequest, context?: { params?: any }) => {
     try {
-      await handler(req, res); // Call the original handler with req and res
+      return await handler(req, context);
     } catch (error) {
+      console.error("API Error:", error);
       if (error instanceof Error) {
-        res.status(400).json({ success: false, message: error.message });
+        return NextResponse.json(
+          { success: false, message: error.message },
+          { status: 400 }
+        );
       } else {
-        res.status(400).json({ success: false, message: 'An unknown error occurred' });
+        return NextResponse.json(
+          { success: false, message: "An unknown error occurred" },
+          { status: 400 }
+        );
       }
     }
   };
