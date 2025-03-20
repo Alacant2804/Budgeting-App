@@ -30,7 +30,7 @@ export const POST = apiErrorHandler(async (req: NextRequest) => {
 });
 
 export const PUT = apiErrorHandler(async (req: NextRequest) => {
-  const { id, name: newName, amount } = await req.json(); // Use `req.json()`
+  const { id, name: newName, amount } = await req.json();
 
   // Validate body values
   if (!id || typeof id !== "number") {
@@ -65,7 +65,7 @@ export const PUT = apiErrorHandler(async (req: NextRequest) => {
 });
 
 export const DELETE = apiErrorHandler(async (req: NextRequest) => {
-  const { id: deleteId } = await req.json(); // Use `req.json()`
+  const { id: deleteId } = await req.json();
 
   // Validate id
   if (!deleteId || typeof deleteId !== "number") {

@@ -28,8 +28,9 @@ model Transaction {
 model Income {
   id         Int      @id @default(autoincrement())
   amount     Float
-  name     String
-  date       DateTime
+  name       String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }
 
 model Account {
@@ -37,6 +38,7 @@ model Account {
   name        String
   balance     Float
   createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Expense {
@@ -44,7 +46,7 @@ model Expense {
   name            String
   amount          Float
   icon            String?
-  date            DateTime
+  updatedAt       DateTime @updatedAt
   plannedExpense  PlannedExpense? @relation(fields: [plannedExpenseId], references: [id])
   plannedExpenseId Int?          @unique
 }
