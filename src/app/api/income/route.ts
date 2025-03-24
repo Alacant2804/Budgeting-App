@@ -10,6 +10,8 @@ export const GET = apiErrorHandler(async () => {
 export const POST = apiErrorHandler(async (req: NextRequest) => {
   const { name } = await req.json();
 
+  console.log(name);
+
   // Validate name value
   if (!name) {
     return NextResponse.json(
@@ -23,7 +25,6 @@ export const POST = apiErrorHandler(async (req: NextRequest) => {
     data: {
       name,
       amount: 0,
-      date: new Date(),
     },
   });
   return NextResponse.json({ success: true, data: newIncome }, { status: 201 });
@@ -59,7 +60,7 @@ export const PUT = apiErrorHandler(async (req: NextRequest) => {
   // Update income item
   const updatedIncome = await prisma.income.update({
     where: { id },
-    data: { name: newName || incomeExists.name, amount, date: new Date() },
+    data: { name: newName || incomeExists.name, amount },
   });
   return NextResponse.json({ success: true, data: updatedIncome });
 });
