@@ -13,6 +13,47 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum AccountCategory {
+  CHECKING
+  SAVINGS
+  CREDIT
+  REAL_ESTATE
+  VEHICLE
+  LOAN
+  INVESTMENT
+  CUSTOM
+}
+
+enum IncomeCategory {
+  SALARY
+  BUSINESS
+  INVESTMENT
+  RENTAL
+  CASHBACK
+  CUSTOM
+}
+
+enum ExpenseCategory {
+  HOUSING
+  UTILITIES
+  TRANSPORTATION
+  GROCERIES
+  EATING_OUT
+  SPORT
+  EDUCATION
+  GIFTS
+  PERSONAL_CARE
+  INSURANCE
+  HEALTHCARE
+  ENTERTAINMENT
+  SHOPPING
+  CLOTHES
+  TRAVEL
+  CHARITY
+  TAXES
+  CUSTOM
+}
+
 // Models
 model Transaction {
   id          Int      @id @default(autoincrement())
@@ -22,6 +63,7 @@ model Transaction {
   toId        Int
   amount      Float
   date        DateTime
+  category    String
   description String?
 }
 
@@ -29,6 +71,7 @@ model Income {
   id         Int      @id @default(autoincrement())
   amount     Float
   name       String
+  category   IncomeCategory @default(CUSTOM)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
@@ -37,6 +80,7 @@ model Account {
   id          Int      @id @default(autoincrement())
   name        String
   balance     Float
+  category    AccountCategory @default(CUSTOM)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -45,7 +89,9 @@ model Expense {
   id              Int            @id @default(autoincrement())
   name            String
   amount          Float
+  category        ExpenseCategory @default(CUSTOM)
   icon            String?
+  createdAt       DateTime       @default(now())
   updatedAt       DateTime @updatedAt
   plannedExpense  PlannedExpense? @relation(fields: [plannedExpenseId], references: [id])
   plannedExpenseId Int?          @unique

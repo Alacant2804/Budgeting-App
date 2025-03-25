@@ -4,7 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Layout from "@/components/Layout/Layout";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] }); // Use Inter font for the entire app
 
 export const metadata: Metadata = {
   title: "Budgeting App",

@@ -31,11 +31,11 @@ export function useHeader() {
   return context;
 }
 
-interface MainHeaderProps {
+interface HeaderProps {
   children: ReactNode;
 }
 
-export default function MainHeader({ children }: MainHeaderProps) {
+export default function Header({ children }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {

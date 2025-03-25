@@ -1,6 +1,5 @@
 "use client";
 
-import { describe } from "node:test";
 import {
   createContext,
   useContext,
@@ -8,59 +7,29 @@ import {
   useEffect,
   ReactNode,
 } from "react";
-
-interface Account {
-  id: number;
-  name: string;
-  icon?: string;
-  balance: number;
-}
-
-interface Income {
-  id: number;
-  name: string;
-  icon?: string;
-  amount: number;
-}
-
-interface PlannedExpense {
-  id: number;
-  amount: number;
-}
-
-interface Expense {
-  id: number;
-  name: string;
-  icon?: string;
-  amount: number;
-  plannedExpenses: PlannedExpense[];
-}
-
-interface Transaction {
-  fromType: "income" | "account";
-  fromId: number;
-  toType: "account" | "expense";
-  toId: number;
-  amount: number;
-  date: string; // Store date in ISO format or a string
-  description?: string; // Optional field for transaction details
-}
+import { Account } from "@/features/accounts/types/types";
+import { Income } from "@/features/income/types/types";
+import { Expense } from "@/features/expenses/types/types";
+import { Transaction } from "@/features/transactions/types/types";
 
 interface FinancialContextProps {
   netWorth: number;
+  setNetWorth: React.Dispatch<React.SetStateAction<number>>;
   income: Income[];
+  setIncome: React.Dispatch<React.SetStateAction<Income[]>>;
   expenses: Expense[];
+  setExpenses: React.Dispatch<React.SetStateAction<Expense[]>>;
   accounts: Account[];
+  setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   transactions: Transaction[];
-  addIncome: (newIncome: Income) => void;
-  addAccount: (newAccount: Account) => void;
-  addExpense: (newExpense: Expense) => void;
+  setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
   transferMoney: (
     fromType: "income" | "account",
     fromId: number,
     toType: "account" | "expense",
     toId: number,
-    amount: number
+    amount: number,
+    category: string
   ) => void;
 }
 
@@ -84,21 +53,14 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
     setNetWorth(totalBalance);
   }, [accounts]);
 
-  // Functions to update financial data
-  const addIncome = (newIncome: Income) =>
-    setIncome((prev) => [...prev, newIncome]);
-  const addAccount = (newAccount: Account) =>
-    setAccounts((prev) => [...prev, newAccount]);
-  const addExpense = (newExpense: Expense) =>
-    setExpenses((prev) => [...prev, newExpense]);
-
   // Add Transaction to History
   const addTransaction = (
     fromType: "income" | "account",
     fromId: number,
     toType: "account" | "expense",
     toId: number,
-    amount: number
+    amount: number,
+    category: string
   ) => {
     const newTransaction = {
       fromType,
@@ -106,6 +68,7 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
       toType,
       toId,
       amount,
+      category,
       date: new Date().toISOString(), // Add current date
       description: `${fromType} ID: ${fromId} to ${toType} ID: ${toId} - Amount: ${amount}`,
     };
@@ -119,7 +82,8 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
     fromId: number,
     toType: "account" | "expense",
     toId: number,
-    amount: number
+    amount: number,
+    category: string
   ) => {
     if (fromType === "income" && toType === "expense") return;
 
@@ -140,7 +104,7 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
         )
       );
 
-      addTransaction(fromType, fromId, toType, toId, amount); // Log transaction
+      addTransaction(fromType, fromId, toType, toId, amount, category); // Log transaction
     } else if (fromType === "account") {
       // Moving money from an Account to an Expense
       const account = accounts.find((acc) => acc.id === fromId);
@@ -158,7 +122,7 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
         )
       );
 
-      addTransaction(fromType, fromId, toType, toId, amount); // Log transaction
+      addTransaction(fromType, fromId, toType, toId, amount, category); // Log transaction
     }
   };
 
@@ -166,12 +130,15 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
     <FinancialContext.Provider
       value={{
         netWorth,
+        setNetWorth,
         income,
+        setIncome,
         expenses,
+        setExpenses,
         accounts,
-        addIncome,
-        addAccount,
-        addExpense,
+        setAccounts,
+        transactions,
+        setTransactions,
         transferMoney,
       }}
     >
