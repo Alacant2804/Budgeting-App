@@ -31,10 +31,17 @@ export function useAccounts() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newAccount),
       });
-      if (!response.ok) throw new Error("Failed to add account");
-      const { data: account } = await response.json();
-      setAccounts((prev) => [...prev, account]);
-      return account;
+
+      if (!response.ok) {
+        const errorData = await response.json(); // Get error details if any
+        console.error("Error while adding account:", errorData);
+        throw new Error(errorData.message || "Failed to add account");
+      }
+
+      const data = await response.json();
+
+      setAccounts((prev) => [...prev, data.data]);
+      return data.data;
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
       throw err;

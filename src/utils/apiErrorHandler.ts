@@ -1,27 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 
+type RouteParams = {
+  params?: Record<string, string>;
+};
+
 export default function apiErrorHandler(
-  handler: (
-    req: NextRequest,
-    params?: { params?: any }
-  ) => Promise<NextResponse>
+  handler: (req: NextRequest, params?: RouteParams) => Promise<NextResponse>
 ) {
-  return async (req: NextRequest, context?: { params?: any }) => {
+  return async (req: NextRequest, context?: RouteParams) => {
     try {
       return await handler(req, context);
     } catch (error) {
       console.error("API Error:", error);
-      if (error instanceof Error) {
-        return NextResponse.json(
-          { success: false, message: error.message },
-          { status: 400 }
-        );
-      } else {
-        return NextResponse.json(
-          { success: false, message: "An unknown error occurred" },
-          { status: 400 }
-        );
-      }
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred",
+        },
+        { status: 500 }
+      );
     }
   };
 }

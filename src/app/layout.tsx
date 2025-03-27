@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header/Header";
 import Layout from "@/components/Layout/Layout";
+import { FinancialProvider } from "@/context/FinancialContext";
 
 const inter = Inter({ subsets: ["latin"] }); // Use Inter font for the entire app
 
@@ -19,9 +20,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header>
-          <Layout>{children}</Layout>
-        </Header>
+        <FinancialProvider>
+          <Header>
+            <Layout>{children}</Layout>
+          </Header>
+        </FinancialProvider>
       </body>
     </html>
   );

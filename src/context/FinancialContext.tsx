@@ -23,14 +23,6 @@ interface FinancialContextProps {
   setAccounts: React.Dispatch<React.SetStateAction<Account[]>>;
   transactions: Transaction[];
   setTransactions: React.Dispatch<React.SetStateAction<Transaction[]>>;
-  transferMoney: (
-    fromType: "income" | "account",
-    fromId: number,
-    toType: "account" | "expense",
-    toId: number,
-    amount: number,
-    category: string
-  ) => void;
 }
 
 const FinancialContext = createContext<FinancialContextProps | undefined>(
@@ -53,79 +45,6 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
     setNetWorth(totalBalance);
   }, [accounts]);
 
-  // Add Transaction to History
-  const addTransaction = (
-    fromType: "income" | "account",
-    fromId: number,
-    toType: "account" | "expense",
-    toId: number,
-    amount: number,
-    category: string
-  ) => {
-    const newTransaction = {
-      fromType,
-      fromId,
-      toType,
-      toId,
-      amount,
-      category,
-      date: new Date().toISOString(), // Add current date
-      description: `${fromType} ID: ${fromId} to ${toType} ID: ${toId} - Amount: ${amount}`,
-    };
-
-    setTransactions((prev) => [...prev, newTransaction]);
-  };
-
-  // General function to move money between income, accounts, and expenses
-  const transferMoney = (
-    fromType: "income" | "account",
-    fromId: number,
-    toType: "account" | "expense",
-    toId: number,
-    amount: number,
-    category: string
-  ) => {
-    if (fromType === "income" && toType === "expense") return;
-
-    if (fromType === "income") {
-      // Moving money from Income to an Account
-      const incomeItem = income.find((item) => item.id === fromId);
-      if (!incomeItem) return;
-
-      setIncome((prev) =>
-        prev.map((item) =>
-          item.id === fromId ? { ...item, amount: item.amount + amount } : item
-        )
-      );
-
-      setAccounts((prev) =>
-        prev.map((acc) =>
-          acc.id === toId ? { ...acc, balance: acc.balance + amount } : acc
-        )
-      );
-
-      addTransaction(fromType, fromId, toType, toId, amount, category); // Log transaction
-    } else if (fromType === "account") {
-      // Moving money from an Account to an Expense
-      const account = accounts.find((acc) => acc.id === fromId);
-      if (!account) return;
-
-      setAccounts((prev) =>
-        prev.map((acc) =>
-          acc.id === fromId ? { ...acc, balance: acc.balance - amount } : acc
-        )
-      );
-
-      setExpenses((prev) =>
-        prev.map((exp) =>
-          exp.id === toId ? { ...exp, amount: exp.amount + amount } : exp
-        )
-      );
-
-      addTransaction(fromType, fromId, toType, toId, amount, category); // Log transaction
-    }
-  };
-
   return (
     <FinancialContext.Provider
       value={{
@@ -139,7 +58,6 @@ export const FinancialProvider = ({ children }: { children: ReactNode }) => {
         setAccounts,
         transactions,
         setTransactions,
-        transferMoney,
       }}
     >
       {children}

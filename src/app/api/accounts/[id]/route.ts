@@ -1,50 +1,31 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import prisma from "@/lib/db";
 import apiErrorHandler from "@/utils/apiErrorHandler";
-import { z } from "zod";
-import { AccountCategory } from "@prisma/client";
-
-const updateAccountSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .max(100, "Name is too long")
-    .optional(),
-  balance: z.number(),
-  category: z.nativeEnum(AccountCategory).optional(),
-});
+import { updateAccountSchema } from "@/features/accounts/schemas/account.schema";
+import {
+  createApiResponse,
+  createErrorResponse,
+  parseId,
+} from "@/utils/api.utils";
 
 export const PUT = apiErrorHandler(
-  async (req: NextRequest, params?: { params?: { id: number } }) => {
-    if (!params?.params?.id) {
-      return NextResponse.json(
-        { success: false, message: "Account ID is required" },
-        { status: 400 }
-      );
+  async (req: NextRequest, params?: { params?: Record<string, string> }) => {
+    const id = parseId(params?.params?.id);
+    if (!id) {
+      return createErrorResponse("Invalid account ID");
     }
-    const id = params.params.id;
-    const body = await req.json();
 
+    const body = await req.json();
     const result = updateAccountSchema.safeParse(body);
     if (!result.success) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Validation failed",
-          errors: result.error.errors,
-        },
-        { status: 400 }
-      );
+      return createErrorResponse("Validation failed", result.error.errors);
     }
 
     const { name, balance, category } = result.data;
 
     const accountExists = await prisma.account.findUnique({ where: { id } });
     if (!accountExists) {
-      return NextResponse.json(
-        { success: false, message: "Account not found" },
-        { status: 404 }
-      );
+      return createErrorResponse("Account not found", undefined, 404);
     }
 
     const updatedAccount = await prisma.account.update({
@@ -56,32 +37,23 @@ export const PUT = apiErrorHandler(
       },
     });
 
-    return NextResponse.json({ success: true, data: updatedAccount });
+    return createApiResponse(updatedAccount);
   }
 );
 
 export const DELETE = apiErrorHandler(
-  async (req: NextRequest, params?: { params?: { id: number } }) => {
-    if (!params?.params?.id) {
-      return NextResponse.json(
-        { success: false, message: "Account ID is required" },
-        { status: 400 }
-      );
+  async (req: NextRequest, params?: { params?: Record<string, string> }) => {
+    const id = parseId(params?.params?.id);
+    if (!id) {
+      return createErrorResponse("Invalid account ID");
     }
-    const id = params.params.id;
 
     const accountToDelete = await prisma.account.findUnique({ where: { id } });
     if (!accountToDelete) {
-      return NextResponse.json(
-        { success: false, message: "Account not found" },
-        { status: 404 }
-      );
+      return createErrorResponse("Account not found", undefined, 404);
     }
 
     await prisma.account.delete({ where: { id } });
-    return NextResponse.json(
-      { success: true, message: "Account deleted successfully" },
-      { status: 200 }
-    );
+    return createApiResponse({ message: "Account deleted successfully" }, 200);
   }
 );

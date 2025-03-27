@@ -1,18 +1,17 @@
 export enum AccountCategory {
-  CHECKING = "Checking",
-  SAVINGS = "Savings",
-  CREDIT = "Credit",
-  REAL_ESTATE = "Real Estate",
-  VEHICLE = "Vehicle",
-  LOAN = "Loan",
-  INVESTMENT = "Investment",
-  CUSTOM = "Custom",
+  CASH = "CASH",
+  CREDIT = "CREDIT",
+  REAL_ESTATE = "REAL_ESTATE",
+  INVESTMENT = "INVESTMENT",
+  CUSTOM = "CUSTOM",
 }
+
+export type Category = AccountCategory | string;
 
 export interface Account {
   id: number;
   name: string;
   balance: number;
   icon?: string;
-  category: AccountCategory;
+  category: Category;
 }
